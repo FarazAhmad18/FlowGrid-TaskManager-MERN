@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Color system */
+:root{
+  --ink:#0a0a0a; --ink-2:#171717; --muted:#6b7280; --line:#e5e7eb;
+  --bg:#ffffff; --glass:rgba(255,255,255,.6); --ring:#0a0a0a;
+}
+.dark:root{ --bg:#000; --glass:rgba(255,255,255,.04); --line:#1f2937; --muted:#a3a3a3; --ring:#fff; }
+
+body{@apply bg-neutral-200 text-neutral-900 dark:bg-slate-900 dark:text-neutral-100;}
+.container-xl{@apply mx-auto max-w-6xl px-4;}
+.card{@apply rounded-2xl border border-neutral-200 dark:border-neutral-800 p-5 bg-white/60 dark:bg-white/5 backdrop-blur;}
+.section-title{@apply text-xl font-semibold tracking-tight;}
+.subtle{@apply text-sm text-neutral-500 dark:text-neutral-400;}
+.link{@apply underline underline-offset-4 hover:no-underline;}
+.input{@apply w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:focus:ring-white;}
+.select{@apply input;}
+.btn{@apply inline-flex items-center justify-center rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900 transition;}
+.btn.primary{@apply bg-neutral-900 text-white dark:bg-white dark:text-black border-transparent;}
+.btn.ghost{@apply border-transparent hover:bg-neutral-100/60 dark:hover:bg-white/10;}
+.badge{@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs border border-neutral-300 dark:border-neutral-700;}
+.badge.blue{border-color:theme('colors.blue.300');color:theme('colors.blue.700');}
+.badge.green{border-color:theme('colors.emerald.300');color:theme('colors.emerald.700');}
+.badge.amber{border-color:theme('colors.amber.300');color:theme('colors.amber.700');}
+.badge.red{border-color:theme('colors.red.300');color:theme('colors.red.700');}
+.badge.gray{border-color:theme('colors.neutral.300');color:theme('colors.neutral.600');}
+.row{@apply flex items-center justify-between gap-3;}
+.kpi{@apply card flex flex-col gap-1;}
+.skel{@apply animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded;}
+/* task item accent */
+.task-accent-low{box-shadow: inset 3px 0 0 0 theme('colors.emerald.500');}
+.task-accent-med{box-shadow: inset 3px 0 0 0 theme('colors.amber.500');}
+.task-accent-high{box-shadow: inset 3px 0 0 0 theme('colors.red.500');}
+/* pill group */
+.pill{ @apply rounded-full border border-neutral-300 dark:border-neutral-700 px-3 py-1 text-sm; }
+.pill.active{ @apply bg-neutral-900 text-white dark:bg-white dark:text-black border-transparent; }
