@@ -1,7 +1,7 @@
 import TaskItem from './TaskItem'
 import Pagination from './Pagination'
 
-export default function TaskList({ items, meta, setPage, onDelete, onToggleDone }) {
+export default function TaskList({ items, meta, setPage, onDelete, onToggleDone, onUpdateStatus }) {
   return (
     <div className="space-y-3">
       {items.length === 0 && (
@@ -11,7 +11,13 @@ export default function TaskList({ items, meta, setPage, onDelete, onToggleDone 
         </div>
       )}
       {items.map((t) => (
-        <TaskItem key={t._id} task={t} onDelete={onDelete} onToggleDone={onToggleDone} />
+        <TaskItem
+          key={t._id}
+          task={t}
+          onDelete={onDelete}
+          onToggleDone={onToggleDone}
+          onUpdateStatus={onUpdateStatus}
+        />
       ))}
       <Pagination page={meta.page} pages={meta.pages} setPage={setPage} />
     </div>

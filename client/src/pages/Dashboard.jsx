@@ -16,7 +16,7 @@ export default function Dashboard(){
   const [label,setLabel]=useState('')
   const [sort,setSort]=useState('-createdAt')
   const [kpi,setKpi]=useState(null)
-  const [mode,setMode]=useState('list') // list | board
+  const [mode,setMode]=useState('list')
 
   const params=useMemo(()=>({ page,q,status,priority,label,sort,limit:8 }),[page,q,status,priority,label,sort])
 
@@ -48,11 +48,20 @@ export default function Dashboard(){
     catch(e){ setItems(prev=>[keep,...prev]); toast.error('Delete failed') }
   }
 
-  const toggleDone=async(task)=>{
-    const newStatus = task.status==='done' ? 'todo' : (task.status || 'done')
+  // NEW: set an explicit status selected from dropdown
+  const updateStatus=async(task, nextStatus)=>{
     const snapshot=[...items]
-    setItems(prev=>prev.map(t=>t._id===task._id? {...t,status:newStatus}:t))
-    try{ await api.put(`/tasks/${task._id}`,{ status:newStatus }) }
+    setItems(prev=>prev.map(t=>t._id===task._id? {...t,status:nextStatus}:t))
+    try{ await api.put(`/tasks/${task._id}`,{ status: nextStatus }) }
+    catch(e){ setItems(snapshot); toast.error('Update failed') }
+  }
+
+  // Button toggles only done <-> todo
+  const toggleDone=async(task)=>{
+    const next = task.status==='done' ? 'todo' : 'done'
+    const snapshot=[...items]
+    setItems(prev=>prev.map(t=>t._id===task._id? {...t,status:next}:t))
+    try{ await api.put(`/tasks/${task._id}`,{ status: next }) }
     catch(e){ setItems(snapshot); toast.error('Update failed') }
   }
 
@@ -80,25 +89,11 @@ export default function Dashboard(){
 
   return (
     <div className="space-y-6 container-xl">
-      {/* HERO / PUNCHLINE */}
-      <div className="py-10 text-center text-white shadow-lg card bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-2xl">
-        <h1 className="text-3xl font-bold tracking-tight">FlowGrid</h1>
-        <p className="mt-2 text-lg/relaxed opacity-95">Make today count ✨Organize smarter, live better.</p>
-        <p className="opacity-90">Where your tasks flow. Write it. Plan it. Ship it.</p>
-      </div>
-
-      <div className="row">
-        <h2 className="section-title">Dashboard</h2>
-        <div className="flex items-center gap-2">
-          <button className={`btn ${mode==='list'?'primary':''}`} onClick={()=>setMode('list')}>List</button>
-          <button className={`btn ${mode==='board'?'primary':''}`} onClick={()=>setMode('board')}>Board</button>
-        </div>
-      </div>
-
+      {/* simple KPIs */}
       <div className="grid gap-3 md:grid-cols-3">
-        <div className="kpi"><div className="subtle">Todo</div><div className="text-3xl font-semibold">{kpi? (kpi.byStatus.find(s=>s._id==='todo')?.count||0): '—'}</div></div>
-        <div className="kpi"><div className="subtle">In Progress</div><div className="text-3xl font-semibold">{kpi? (kpi.byStatus.find(s=>s._id==='in-progress')?.count||0): '—'}</div></div>
-        <div className="kpi"><div className="subtle">Overdue</div><div className="text-3xl font-semibold">{kpi? kpi.overdue : '—'}</div></div>
+        <div className="card"><div className="subtle">Todo</div><div className="text-3xl font-semibold">{kpi? (kpi.byStatus.find(s=>s._id==='todo')?.count||0): '—'}</div></div>
+        <div className="card"><div className="subtle">In Progress</div><div className="text-3xl font-semibold">{kpi? (kpi.byStatus.find(s=>s._id==='in-progress')?.count||0): '—'}</div></div>
+        <div className="card"><div className="subtle">Overdue</div><div className="text-3xl font-semibold">{kpi? kpi.overdue : '—'}</div></div>
       </div>
 
       <Filters q={q} setQ={setQ} status={status} setStatus={setStatus} priority={priority} setPriority={setPriority} label={label} setLabel={setLabel} sort={sort} setSort={setSort} />
@@ -108,7 +103,14 @@ export default function Dashboard(){
         <div className="grid gap-3">{Array.from({length:4}).map((_,i)=> <div key={i} className="h-20 card skel"/>)}</div>
       ) : (
         mode==='list'
-          ? <TaskList items={items} meta={meta} setPage={setPage} onDelete={deleteTask} onToggleDone={toggleDone} />
+          ? <TaskList
+              items={items}
+              meta={meta}
+              setPage={setPage}
+              onDelete={deleteTask}
+              onToggleDone={toggleDone}
+              onUpdateStatus={updateStatus}
+            />
           : <Board />
       )}
     </div>

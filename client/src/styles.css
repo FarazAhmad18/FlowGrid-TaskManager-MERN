@@ -2,37 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Color system */
-:root{
-  --ink:#0a0a0a; --ink-2:#171717; --muted:#6b7280; --line:#e5e7eb;
-  --bg:#ffffff; --glass:rgba(255,255,255,.6); --ring:#0a0a0a;
-}
-.dark:root{ --bg:#000; --glass:rgba(255,255,255,.04); --line:#1f2937; --muted:#a3a3a3; --ring:#fff; }
+/* One-look app: slate background + light text */
+html, body { height: 100%; }
+body{@apply bg-slate-900 text-neutral-100;}
 
-body{@apply bg-neutral-200 text-neutral-900 dark:bg-slate-900 dark:text-neutral-100;}
+/* Shell primitives */
 .container-xl{@apply mx-auto max-w-6xl px-4;}
-.card{@apply rounded-2xl border border-neutral-200 dark:border-neutral-800 p-5 bg-white/60 dark:bg-white/5 backdrop-blur;}
+.card{@apply rounded-2xl border border-white/10 p-5 bg-white/5 backdrop-blur;}
 .section-title{@apply text-xl font-semibold tracking-tight;}
-.subtle{@apply text-sm text-neutral-500 dark:text-neutral-400;}
+.subtle{@apply text-sm text-neutral-300;}
 .link{@apply underline underline-offset-4 hover:no-underline;}
-.input{@apply w-full rounded-xl border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:focus:ring-white;}
+.input{@apply w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-white/60;}
 .select{@apply input;}
-.btn{@apply inline-flex items-center justify-center rounded-xl border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-neutral-900 transition;}
-.btn.primary{@apply bg-neutral-900 text-white dark:bg-white dark:text-black border-transparent;}
-.btn.ghost{@apply border-transparent hover:bg-neutral-100/60 dark:hover:bg-white/10;}
-.badge{@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs border border-neutral-300 dark:border-neutral-700;}
-.badge.blue{border-color:theme('colors.blue.300');color:theme('colors.blue.700');}
-.badge.green{border-color:theme('colors.emerald.300');color:theme('colors.emerald.700');}
-.badge.amber{border-color:theme('colors.amber.300');color:theme('colors.amber.700');}
-.badge.red{border-color:theme('colors.red.300');color:theme('colors.red.700');}
-.badge.gray{border-color:theme('colors.neutral.300');color:theme('colors.neutral.600');}
+.btn{@apply inline-flex items-center justify-center rounded-xl border border-white/10 px-4 py-2 text-sm font-medium hover:bg-white/10 transition;}
+.btn.primary{@apply bg-white text-slate-900 border-transparent;}
+.btn.ghost{@apply border-transparent hover:bg-white/10;}
+.badge{@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs border border-white/10 bg-white/5;}
+.badge.blue{color:#93c5fd;border-color:#60a5fa;}
+.badge.green{color:#86efac;border-color:#34d399;}
+.badge.amber{color:#fcd34d;border-color:#f59e0b;}
+.badge.red{color:#fca5a5;border-color:#ef4444;}
+.badge.gray{color:#d1d5db;border-color:#9ca3af;}
 .row{@apply flex items-center justify-between gap-3;}
 .kpi{@apply card flex flex-col gap-1;}
-.skel{@apply animate-pulse bg-neutral-200 dark:bg-neutral-800 rounded;}
+.skel{@apply animate-pulse bg-white/10 rounded;}
 /* task item accent */
-.task-accent-low{box-shadow: inset 3px 0 0 0 theme('colors.emerald.500');}
-.task-accent-med{box-shadow: inset 3px 0 0 0 theme('colors.amber.500');}
-.task-accent-high{box-shadow: inset 3px 0 0 0 theme('colors.red.500');}
-/* pill group */
-.pill{ @apply rounded-full border border-neutral-300 dark:border-neutral-700 px-3 py-1 text-sm; }
-.pill.active{ @apply bg-neutral-900 text-white dark:bg-white dark:text-black border-transparent; }
+.task-accent-low{box-shadow: inset 3px 0 0 0 #34d399;}
+.task-accent-med{box-shadow: inset 3px 0 0 0 #f59e0b;}
+.task-accent-high{box-shadow: inset 3px 0 0 0 #ef4444;}
+/* pill */
+.pill{ @apply rounded-full border border-white/10 px-3 py-1 text-sm bg-white/5; }
+.pill.active{ @apply bg-white text-slate-900 border-transparent; }
+
+
+
+
+
+
+
+
+/* Make sure text defaults are applied globally */
+html { @apply text-neutral-900 dark:text-neutral-100; }
+
+/* Input & select styles */
+.input, .select {
+  @apply w-full rounded-xl border border-neutral-300 dark:border-neutral-700 px-3 py-2
+         focus:outline-none focus:ring-2 focus:ring-neutral-900 dark:focus:ring-white;
+
+  /* Light mode */
+  background-color: theme('colors.white');
+  color: theme('colors.neutral.900');
+}
+
+/* Dark mode overrides */
+html.dark .input,
+html.dark .select {
+  background-color: theme('colors.slate.900');
+  color: theme('colors.neutral.100');
+}
+
+/* Placeholders */
+.input::placeholder, .select::placeholder {
+  color: theme('colors.neutral.500');
+}
+html.dark .input::placeholder,
+html.dark .select::placeholder {
+  color: theme('colors.neutral.400');
+}
+
+/* Options inside <select> */
+select option {
+  background-color: white;
+  color: #111827;
+}
+html.dark select option {
+  background-color: #0f172a; /* slate-900 */
+  color: #f5f5f5;
+}
